@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RFP Eval</title>
+    <title>AI Chat</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
         <div id="chat-screen">
             <div class="header">
                 <div class="header-title">
-                    <h1>RFP Eval</h1>
+                    <h1>qZip Chat</h1>
                 </div>
                 <div class="header-actions">
                     <button id="help-btn">
@@ -129,28 +129,28 @@
                 </div>
                 <div class="profile-section">
                     <h2>System Prompt</h2>
-                    <div id="company-profile-section">
-                        <textarea id="company-profile-markdown"
+                    <div id="system-prompt-section">
+                        <textarea id="system-prompt-markdown"
                             placeholder="Enter System Prompt in Markdown..."></textarea>
-                        <button id="save-profile">Save Profile</button>
+                        <button id="save-prompt">Save System Prompt</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="company-profile-modal" class="modal">
+    <div id="system-prompt-modal" class="modal">
         <div class="modal-content">
-            <span class="close-company-profile">&times;</span>
+            <span class="close-system-prompt">&times;</span>
             <h2>Set System Prompt</h2>
             <p>It seems you haven't set your System Prompt yet. Please set it below.</p>
-            <textarea id="modal-company-profile-markdown" placeholder="Enter System Prompt in Markdown..."></textarea>
-            <button id="save-modal-profile">Save Profile</button>
+            <textarea id="modal-system-prompt-markdown" placeholder="Enter System Prompt in Markdown..."></textarea>
+            <button id="save-modal-profile">Save Prompt</button>
         </div>
     </div>
     <div id="help-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>How to use the RFP Eval App</h2>
+            <h2>How to use the qZip Chat App</h2>
             <ol>
                 <li>Go to the profile page by clicking the profile icon.</li>
                 <li>Set up your API key and provider.</li>
@@ -192,7 +192,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         const converter = new showdown.Converter({ tables: true });
 
         const chatScreen = document.getElementById('chat-screen');
-        const profileScreen = document.getElementById('profile-screen');
+        const providerScreen = document.getElementById('profile-screen');
         const chatWindow = document.getElementById('chat-window');
         const chatForm = document.getElementById('chat-form');
         const userInput = document.getElementById('user-input');
@@ -200,8 +200,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         const fileBtn = document.getElementById('file-btn');
         const apiKeyInput = document.getElementById('api-key');
 
-        const companyProfileMarkdown = document.getElementById('company-profile-markdown');
-        const saveProfileBtn = document.getElementById('save-profile');
+        const companyProfileMarkdown = document.getElementById('system-prompt-markdown');
+        const savePromptBtn = document.getElementById('save-prompt');
         const profileBtn = document.getElementById('profile-btn');
         const backBtn = document.getElementById('back-btn');
 
@@ -242,7 +242,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             }
         }
 
-        function populateProfileUI() {
+        function populateProviderUI() {
             if (!activeProvider) return;
 
             apiProviderSelect.innerHTML = '';
@@ -287,7 +287,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         const easymde = new EasyMDE({ element: companyProfileMarkdown });
 
 
-        const savedProfile = localStorage.getItem('company_profile');
+        const savedProfile = localStorage.getItem('system_prompt');
 
         // Load System Prompt from local storage
         if (savedProfile) {
@@ -344,35 +344,33 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
 
         // Save System Prompt to local storage
-        //const saveProfileBtn = document.getElementById('save-profile');
-        saveProfileBtn.onclick = () => {
+        savePromptBtn.onclick = () => {
             const profile = easymde.value();
-            localStorage.setItem('company_profile', profile);
+            localStorage.setItem('system_prompt', profile);
             alert('System Prompt saved!');
         };
         function profileButtonClicked() {
-            console.log("Profile button clicked");
+            console.log("Prompt button clicked");
             document.getElementById('chat-screen').style.display = 'none';
             document.getElementById('profile-screen').style.display = 'block';
         }
 
         //----
-        // const companyProfileMarkdown = document.getElementById('company-profile-markdown');
+        // const companyProfileMarkdown = document.getElementById('system-prompt-markdown');
         //    const easymde = new EasyMDE({ element: companyProfileMarkdown });
         // Load System Prompt from local storage
-        //    const savedProfile = localStorage.getItem('company_profile');
+        //    const savedProfile = localStorage.getItem('system_prompt');
         if (savedProfile) {
             easymde.value(savedProfile);
         }
         // Save System Prompt to local storage
-        //const saveProfileBtn = document.getElementById('save-profile');
-        saveProfileBtn.onclick = () => {
+        savePromptBtn.onclick = () => {
             const profile = easymde.value();
-            localStorage.setItem('company_profile', profile);
+            localStorage.setItem('system_prompt', profile);
             alert('System Prompt saved!');
         };
         function profileButtonClicked() {
-            console.log("Profile button clicked");
+            console.log("Prompt button clicked");
             document.getElementById('chat-screen').style.display = 'none';
             document.getElementById('profile-screen').style.display = 'block';
         }
@@ -380,18 +378,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         //---
         profileBtn.onclick = () => {
             chatScreen.style.display = 'none';
-            profileScreen.style.display = 'block';
-            console.log('Switched to profile screen');
-            const savedProfile = localStorage.getItem('company_profile');
+            providerScreen.style.display = 'block';
+            console.log('Switched to provider screen');
+            const savedProfile = localStorage.getItem('system_prompt');
             if (savedProfile) {
                 easymde.value(savedProfile);
             }
-            populateProfileUI();
+            populateProviderUI();
         };
 
         backBtn.onclick = () => {
             chatScreen.style.display = 'block';
-            profileScreen.style.display = 'none';
+            providerScreen.style.display = 'none';
         };
 
 
@@ -411,7 +409,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             }
 
             localStorage.setItem('active_provider_url', activeProvider.baseUrl);
-            populateProfileUI();
+            populateProviderUI();
         };
 
         verifyProviderBtn.onclick = async () => {
@@ -493,7 +491,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                 reader.readAsArrayBuffer(file);
                 const message = userInput.value.trim();
                 if (!message || message === '') {
-                    message = "Summarize the above RFP and match with the System Prompt for fitment.";
+                    message = "Summarize the above PDF.";
                 };
             }
         };
@@ -502,24 +500,21 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             e.preventDefault();
             const message = userInput.value.trim();
             if (!message || message === '') {
-                message = "Summarize the above RFP and match with the System Prompt for fitment.";
+                message = "Summarize the above PDF.";
             };
 
             if (!activeProvider.baseUrl || !activeProvider.model) {
                 alert('Please configure your provider and model in the profile page.');
                 chatScreen.style.display = 'none';
-                profileScreen.style.display = 'block';
+                providerScreen.style.display = 'block';
                 return;
             }
 
             let finalMessage = message;
             if (pdfText) {
-                finalMessage = `There is the RFP text : ${pdfText}\n\nUser Prompt:\n${message}`;
+                finalMessage = `There is the  text : ${pdfText}\n\nUser Prompt:\n${message}`;
                 // pdfText = ''; // Clear the pdfText after using it
-            } else {
-                alert('Please upload a PDF RFP document for evaluation.');
-                return;
-            }
+            } 
 
             appendMessage('user', message);
             userInput.value = '';
@@ -539,24 +534,14 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         }
 
         async function sendMessageToOpenAI(message) {
-            const savedProfile = localStorage.getItem('company_profile') || '';
-            if (savedProfile == '') {
+            const sysPrompt = localStorage.getItem('system_prompt') || '';
+            if (sysPrompt == '') {
                alert('Please set your System Prompt in the profile page.');
                chatScreen.style.display = 'none';
-               profileScreen.style.display = 'block';
+               providerScreen.style.display = 'block';
                return;
             }
-            const sysMessage = `You are a RFP (Request for Proposal) evaluation expert, 
-            and help match the System Prompt with the RFP,
-             for fitment. Evaluate to 3 grades High (good fit), Medium and Low. Also explain the reason for the grade.\n\n
-             show your response in markdown format.\n\n
-             If the RFP text is too long, summarize it first, then match it with the System Prompt.\n\n
-             If the RFP text is not provided, ask the user to upload the RFP document.\n\n
-             If the System Prompt is not provided, ask the user to set the System Prompt in the profile page.\n\n
-             If the RFP text is provided, use it in your response.\n\n
-             here is the System Prompt:\n\n${savedProfile}\n\n 
-             
-             `
+            
             appendMessage('assistant', '...');
             startTimer();
             let reply = 'No response.';
@@ -574,7 +559,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                         messages: [
                             {
                                 role: "system",
-                                content: sysMessage
+                                content: sysPrompt
                             },
                             { role: 'user', content: message }]
                     })
@@ -597,6 +582,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                 model: activeProvider.model,
                 api: activeProvider.baseUrl,
                 prompt: message,
+                system_prompt: sysPrompt,
                 response: data,
                 duration: showTime,
                 tokens: usage?.total_tokens || null
@@ -673,6 +659,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             chatHistory.forEach((item, index) => {
                 const row = document.createElement('tr');
                 const responseContent = item.response?.choices?.[0]?.message?.content || item.response || 'No response in history';
+                const formattedSysPrompt = converter.makeHtml(item.system_prompt);
                 const formattedPrompt = converter.makeHtml(item.prompt);
                 const formattedResponse = converter.makeHtml(responseContent);
 
@@ -690,6 +677,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                 detailsRow.style.display = 'none';
                 detailsRow.innerHTML = `
                     <td colspan="5">
+                        <p><b>System Prompt:</b></p>
+                        <div>${formattedSysPrompt}</div>
                         <p><b>Prompt:</b></p>
                         <div>${formattedPrompt}</div>
                         <p><b>Response:</b></p>
@@ -716,6 +705,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
         historyBtn.onclick = function () {
             chatHistory = JSON.parse(localStorage.getItem('chat_history') || '[]');
+            chatHistory.length === 0 && alert('Please send your first message to start the chat.');
             sortHistory();
             renderHistory();
             historyModal.style.display = "block";
@@ -779,10 +769,10 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             }
         }
 
-        const companyProfileModal = document.getElementById('company-profile-modal');
-        const closeCompanyProfileModal = document.getElementsByClassName('close-company-profile')[0];
+        const companyProfileModal = document.getElementById('system-prompt-modal');
+        const closeCompanyProfileModal = document.getElementsByClassName('close-system-prompt')[0];
         const saveModalProfileBtn = document.getElementById('save-modal-profile');
-        const modalCompanyProfileMarkdown = document.getElementById('modal-company-profile-markdown');
+        const modalCompanyProfileMarkdown = document.getElementById('modal-system-prompt-markdown');
         const modalEasymde = new EasyMDE({ element: modalCompanyProfileMarkdown });
 
         if (!savedProfile) {
@@ -795,7 +785,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
         saveModalProfileBtn.onclick = function() {
             const profile = modalEasymde.value();
-            localStorage.setItem('company_profile', profile);
+            localStorage.setItem('system_prompt', profile);
             easymde.value(profile); // Also update the main editor
             companyProfileModal.style.display = "none";
             alert('System Prompt saved!');
