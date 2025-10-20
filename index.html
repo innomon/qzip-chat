@@ -192,7 +192,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         const converter = new showdown.Converter({ tables: true });
 
         const chatScreen = document.getElementById('chat-screen');
-        const profileScreen = document.getElementById('profile-screen');
+        const providerScreen = document.getElementById('profile-screen');
         const chatWindow = document.getElementById('chat-window');
         const chatForm = document.getElementById('chat-form');
         const userInput = document.getElementById('user-input');
@@ -242,7 +242,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             }
         }
 
-        function populateProfileUI() {
+        function populateProviderUI() {
             if (!activeProvider) return;
 
             apiProviderSelect.innerHTML = '';
@@ -378,18 +378,18 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         //---
         profileBtn.onclick = () => {
             chatScreen.style.display = 'none';
-            profileScreen.style.display = 'block';
-            console.log('Switched to profile screen');
+            providerScreen.style.display = 'block';
+            console.log('Switched to provider screen');
             const savedProfile = localStorage.getItem('system_prompt');
             if (savedProfile) {
                 easymde.value(savedProfile);
             }
-            populateProfileUI();
+            populateProviderUI();
         };
 
         backBtn.onclick = () => {
             chatScreen.style.display = 'block';
-            profileScreen.style.display = 'none';
+            providerScreen.style.display = 'none';
         };
 
 
@@ -409,7 +409,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             }
 
             localStorage.setItem('active_provider_url', activeProvider.baseUrl);
-            populateProfileUI();
+            populateProviderUI();
         };
 
         verifyProviderBtn.onclick = async () => {
@@ -491,7 +491,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                 reader.readAsArrayBuffer(file);
                 const message = userInput.value.trim();
                 if (!message || message === '') {
-                    message = "Summarize the above RFP and match with the System Prompt for fitment.";
+                    message = "Summarize the above PDF.";
                 };
             }
         };
@@ -500,24 +500,21 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             e.preventDefault();
             const message = userInput.value.trim();
             if (!message || message === '') {
-                message = "Summarize the above RFP and match with the System Prompt for fitment.";
+                message = "Summarize the above PDF.";
             };
 
             if (!activeProvider.baseUrl || !activeProvider.model) {
                 alert('Please configure your provider and model in the profile page.');
                 chatScreen.style.display = 'none';
-                profileScreen.style.display = 'block';
+                providerScreen.style.display = 'block';
                 return;
             }
 
             let finalMessage = message;
             if (pdfText) {
-                finalMessage = `There is the RFP text : ${pdfText}\n\nUser Prompt:\n${message}`;
+                finalMessage = `There is the  text : ${pdfText}\n\nUser Prompt:\n${message}`;
                 // pdfText = ''; // Clear the pdfText after using it
-            } else {
-                alert('Please upload a PDF RFP document for evaluation.');
-                return;
-            }
+            } 
 
             appendMessage('user', message);
             userInput.value = '';
@@ -537,24 +534,14 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         }
 
         async function sendMessageToOpenAI(message) {
-            const savedProfile = localStorage.getItem('system_prompt') || '';
-            if (savedProfile == '') {
+            const sysPrompt = localStorage.getItem('system_prompt') || '';
+            if (sysPrompt == '') {
                alert('Please set your System Prompt in the profile page.');
                chatScreen.style.display = 'none';
-               profileScreen.style.display = 'block';
+               providerScreen.style.display = 'block';
                return;
             }
-            const sysMessage = `You are a RFP (Request for Proposal) evaluation expert, 
-            and help match the System Prompt with the RFP,
-             for fitment. Evaluate to 3 grades High (good fit), Medium and Low. Also explain the reason for the grade.\n\n
-             show your response in markdown format.\n\n
-             If the RFP text is too long, summarize it first, then match it with the System Prompt.\n\n
-             If the RFP text is not provided, ask the user to upload the RFP document.\n\n
-             If the System Prompt is not provided, ask the user to set the System Prompt in the profile page.\n\n
-             If the RFP text is provided, use it in your response.\n\n
-             here is the System Prompt:\n\n${savedProfile}\n\n 
-             
-             `
+            
             appendMessage('assistant', '...');
             startTimer();
             let reply = 'No response.';
@@ -572,7 +559,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                         messages: [
                             {
                                 role: "system",
-                                content: sysMessage
+                                content: sysPrompt
                             },
                             { role: 'user', content: message }]
                     })
@@ -595,6 +582,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                 model: activeProvider.model,
                 api: activeProvider.baseUrl,
                 prompt: message,
+                system_prompt: sysPrompt,
                 response: data,
                 duration: showTime,
                 tokens: usage?.total_tokens || null
@@ -671,6 +659,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             chatHistory.forEach((item, index) => {
                 const row = document.createElement('tr');
                 const responseContent = item.response?.choices?.[0]?.message?.content || item.response || 'No response in history';
+                const formattedSysPrompt = converter.makeHtml(item.system_prompt);
                 const formattedPrompt = converter.makeHtml(item.prompt);
                 const formattedResponse = converter.makeHtml(responseContent);
 
@@ -688,6 +677,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                 detailsRow.style.display = 'none';
                 detailsRow.innerHTML = `
                     <td colspan="5">
+                        <p><b>System Prompt:</b></p>
+                        <div>${formattedSysPrompt}</div>
                         <p><b>Prompt:</b></p>
                         <div>${formattedPrompt}</div>
                         <p><b>Response:</b></p>
@@ -714,6 +705,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
         historyBtn.onclick = function () {
             chatHistory = JSON.parse(localStorage.getItem('chat_history') || '[]');
+            chatHistory.length === 0 && alert('Please send your first message to start the chat.');
             sortHistory();
             renderHistory();
             historyModal.style.display = "block";

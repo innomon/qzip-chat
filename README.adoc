@@ -81,3 +81,10 @@ The table should be sortable by Date, model, API provider, Tokens Consumed. and 
 When the user clicks on a row, it should expand to show the full User Message and LLM Response in a readable format.
 
 The history table is presently scrollable only when "+" button is clicked. I want it to be scrollable always. Show all the rows, and the table should take all the available space in the modal dialog.
+
+== Deploy
+ cp index.html public/index.html
+ cp style.css public/style.css
+ firebase deploy --only hosting:chat-qzip-in
+
+https://chat-qzip-in.web.app/
