@@ -161,7 +161,7 @@ button {
     text-transform: uppercase;
 }
 
-#chat-form button, #save-key, #save-profile, #verify-provider, #save-model, #change-model-btn, #save-provider {
+#chat-form button, #save-key, #save-profile, #verify-provider, #save-model, #change-model-btn, #save-provider, #save-prompt {
     background-color: var(--md-sys-color-primary);
     color: var(--md-sys-color-on-primary);
 }
@@ -408,3 +408,4 @@ textarea {
     border-radius: 4px;
     overflow: hidden;
 }
+
