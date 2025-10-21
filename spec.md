@@ -57,6 +57,18 @@ The core workflow involves:
 - Ability to expand each row to view the full prompt and response.
 - A button to clear the entire chat history.
 
+**Changes:**
+
+The export history  button is added to the HTML code.
+
+The JavaScript code is updated to include the button functionality.
+
+*Note:*
+
+The `chat_history.json` file will be saved in the user's browser's download directory.
+
+The user can then import the file into other applications or tools that support JSON files.
+
 ### 2.8. Help Modal
 
 - A modal that provides instructions on how to use the application.
