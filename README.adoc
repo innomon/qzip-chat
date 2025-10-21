@@ -12,7 +12,7 @@ https://platform.openai.com/docs/api-reference/chat/create[OpenAI API]
  const OPENAI_API_BASE_URL = 'https://api.openai.com';
  const OPENAI_API_BASE_URL = 'http://localhost:11434'; // for local testing with a proxy server
  const OPENAI_API_BASE_URL = 'http://192.168.29:11434';
-````
+```
 
 == Deploy
 
@@ -54,7 +54,6 @@ Download and run it locally if you wish to try locally hosted Ollama.
   git subtree push --prefix public origin gh-pages
 
 https://innomon.github.io/chat-qzip/
-
 
 == Local Development  
 
