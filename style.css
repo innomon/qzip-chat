@@ -243,6 +243,12 @@ button {
     margin-top: 10px;
 }
 
+#export-history-btn {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    margin-top: 10px;
+}
+
 #history-table-container {
     overflow-y: auto;
     flex-grow: 1;
