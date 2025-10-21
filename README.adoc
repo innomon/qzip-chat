@@ -1,17 +1,7 @@
-= RFP Eval
+= LLM Prompts Eval
+A test app to figure out the best system prompts for various LLM models, using OpenAI API compatible endpoints.
 
-One time setup instructions for a RFP Eval using OpenAI's GPT-4V(ision) model.
-:toc:
-
-.Run once
-  npm install -g typescript
-
-.Run always
-    
-    tsc main.ts --target ES6 --outFile main.js
-changed to : 
-
-  npx tsc
+It is a pure HTML/JS application that runs in the browser, no backend server required.
 
 == API Endpoints
 
@@ -24,67 +14,55 @@ https://platform.openai.com/docs/api-reference/chat/create[OpenAI API]
  const OPENAI_API_BASE_URL = 'http://192.168.29:11434';
 ````
 
-.Prompt
-
-Presenlty the OPENAI_API_BASE_URL and the model are hardcoded. We want to change it to user selectable.
-In the profile page create a drop down with the following options:
-
-OpenAI ('https://api.openai.com') , Gemini (https://generativelanguage.googleapis.com/v1beta/openai/) , Ollama ('http://localhost:11434') and custom, if user selects custom then they have to provide the base URL.
-
-## TODO
-
-While awaiting the model response, show a loading spinner.
-
-Once the option is selected, we verify that the URL is working, then pull all the models provided by the API. The user selects one of the models.
-The OpenAPI compatible provider and the model is saved locally. The user can change the model, by clicking change model button, they can also change the API provider.
-
-Before starting the chat, we check if System Prompt and API and model options are present, if not user will be taken to the profile page after showing a warning dialog.
-
-the System Prompt text area should have a markdown editor tool like SimpleMDE (EasyMDE)
-
-. **Token Consumed**
-
-for each request we log the tokens consumed in a local DB.
-
-. **Chat History**
-We save the chat history in a local DB, and show it in the chat window. The user can clear the chat history.
-
-`chatForm.onsubmit` is an async function, I want to show a loading spinner while the function is executing.
-
-== Fixed
-Add a help icon to center top of the page, clicking on it will open a modal dialog with instructions on how to use the app.
-
-add a button to show chat history, clicking on it will open a modal dialog with the chat history.
-
-add a button to clear chat history, clicking on it will clear the chat history.
-
-localStorage.setItem('company_profile', profile);
-
-@index.html currently the API Key common for all providers, but the API Key is provider specific. So we need to save the base URL, provider, model and API key  as one json in localStorage as an array of objects. Make the changes to the code to support this.
-
-@index.html line 217 providerSettings should be used as the basis line 98, provider drop down selection.
-
-Use a markdown display library, like showdown.js, to render the LLM response in the chat window.
-
-== Fixme
-
-== Feature
-I need to add functionality to the included html file :
-
-
-
-In the history modal dialog, I want to show the chat history in a table format with the 
-following columns: Date, model, API provider, Tokens Consumed. A icon button to expand the  User Message, LLM Response
-
-The table should be sortable by Date, model, API provider, Tokens Consumed. and scrollable.
-
-When the user clicks on a row, it should expand to show the full User Message and LLM Response in a readable format.
-
-The history table is presently scrollable only when "+" button is clicked. I want it to be scrollable always. Show all the rows, and the table should take all the available space in the modal dialog.
-
 == Deploy
+
+=== On Firebase Hosting
+
  cp index.html public/index.html
  cp style.css public/style.css
  firebase deploy --only hosting:chat-qzip-in
 
 https://chat-qzip-in.web.app/
+
+https://chat.qzip.in/
+
+Note: update the firebase.json file with the correct public directory before deploying.
+
+The firebase.json file should have the following content:
+
+ {
+   "hosting": {
+     "public": "public",
+     "ignore": [
+       "firebase.json",
+       "**/.*",
+       "**/node_modules/**"
+     ]
+   }
+ }
+
+Also note that deployed sites cannot use localhost or local network machines as the API base URL, use the deployed URL instead.
+
+Download and run it locally if you wish to try locally hosted Ollama.
+
+=== On GitHub Pages
+
+ git branch -M main
+ git remote add origin https://github.com/innomon/chat-qzip.git  
+
+  git push -u origin main
+  git subtree push --prefix public origin gh-pages
+
+https://innomon.github.io/chat-qzip/
+
+
+== Local Development  
+
+run a local web server to serve the files
+
+ npx http-server 
+
+  open http://localhost:8080
+
+Alternatively use the Live Server extension in VS Code.
+
