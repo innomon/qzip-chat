@@ -161,7 +161,7 @@ button {
     text-transform: uppercase;
 }
 
-#chat-form button, #save-key, #save-profile, #verify-provider, #save-model, #change-model-btn, #save-provider {
+#chat-form button, #save-key, #save-profile, #verify-provider, #save-model, #change-model-btn, #save-provider, #save-prompt {
     background-color: var(--md-sys-color-primary);
     color: var(--md-sys-color-on-primary);
 }
@@ -238,6 +238,12 @@ button {
 }
 
 #save-modal-profile {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    margin-top: 10px;
+}
+
+#export-history-btn {
     background-color: var(--md-sys-color-primary);
     color: var(--md-sys-color-on-primary);
     margin-top: 10px;
@@ -402,3 +408,4 @@ textarea {
     border-radius: 4px;
     overflow: hidden;
 }
+

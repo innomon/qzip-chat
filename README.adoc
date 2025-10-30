@@ -11,7 +11,6 @@ https://platform.openai.com/docs/api-reference/chat/create[OpenAI API]
 
  const OPENAI_API_BASE_URL = 'https://api.openai.com';
  const OPENAI_API_BASE_URL = 'http://192.168.29.182:11434/v1'; // for local testing with a proxy server
- const OPENAI_API_BASE_URL = 'http://192.168.29.182:11434/v1';
 ```
 
  curl http://localhost:11434/api/tags
@@ -66,4 +65,10 @@ run a local web server to serve the files
   open http://localhost:8080
 
 Alternatively use the Live Server extension in VS Code.
+
+== Build an executable
+
+ go build -o chatter .
+
+
 

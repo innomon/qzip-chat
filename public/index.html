@@ -102,23 +102,23 @@
                         <input type="text" id="api-base-url" placeholder="Enter custom API base URL"
                             style="display: none;" />
                         <div id="api-key-container">
-                        <input type="password" id="api-key" placeholder="API Key" />
-                        <button id="toggle-api-key-visibility">
-                            <svg id="eye-open" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg id="eye-closed" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                style="display: none;">
-                                <path
-                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
-                                </path>
-                                <line x1="1" y1="1" x2="23" y2="23"></line>
-                            </svg>
-                        </button>
-                    </div>
+                            <input type="password" id="api-key" placeholder="API Key" />
+                            <button id="toggle-api-key-visibility">
+                                <svg id="eye-open" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
+                                    stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg id="eye-closed" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
+                                    stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                    style="display: none;">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                    </path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
                         <button id="verify-provider">Verify Provider and Fetch Models</button>
                     </div>
                 </div>
@@ -179,7 +179,9 @@
                     <tbody id="history-content"></tbody>
                 </table>
             </div>
+            <button id="export-history-btn">Export History</button>
         </div>
+        
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
@@ -187,8 +189,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
 
     <script>
-        
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
         const converter = new showdown.Converter({ tables: true });
 
         const chatScreen = document.getElementById('chat-screen');
@@ -514,7 +516,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             if (pdfText) {
                 finalMessage = `There is the  text : ${pdfText}\n\nUser Prompt:\n${message}`;
                 // pdfText = ''; // Clear the pdfText after using it
-            } 
+            }
 
             appendMessage('user', message);
             userInput.value = '';
@@ -536,12 +538,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         async function sendMessageToOpenAI(message) {
             const sysPrompt = localStorage.getItem('system_prompt') || '';
             if (sysPrompt == '') {
-               alert('Please set your System Prompt in the profile page.');
-               chatScreen.style.display = 'none';
-               providerScreen.style.display = 'block';
-               return;
+                alert('Please set your System Prompt in the profile page.');
+                chatScreen.style.display = 'none';
+                providerScreen.style.display = 'block';
+                return;
             }
-            
+
             appendMessage('assistant', '...');
             startTimer();
             let reply = 'No response.';
@@ -689,7 +691,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             });
 
             document.querySelectorAll('.expand-btn').forEach(btn => {
-                btn.onclick = function() {
+                btn.onclick = function () {
                     const index = this.getAttribute('data-index');
                     const detailsRow = document.querySelectorAll('.history-details')[index];
                     if (detailsRow.style.display === 'none') {
@@ -732,7 +734,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
         }
 
         document.querySelectorAll('#history-table th').forEach(th => {
-            th.onclick = function() {
+            th.onclick = function () {
                 const newSortColumn = this.getAttribute('data-sort');
                 if (sortColumn === newSortColumn) {
                     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
@@ -779,11 +781,11 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
             companyProfileModal.style.display = 'block';
         }
 
-        closeCompanyProfileModal.onclick = function() {
+        closeCompanyProfileModal.onclick = function () {
             companyProfileModal.style.display = "none";
         }
 
-        saveModalProfileBtn.onclick = function() {
+        saveModalProfileBtn.onclick = function () {
             const profile = modalEasymde.value();
             localStorage.setItem('system_prompt', profile);
             easymde.value(profile); // Also update the main editor
@@ -802,7 +804,26 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
                 companyProfileModal.style.display = "none";
             }
         }
+        const exportHistoryBtn = document.getElementById('export-history-btn');
+
+        exportHistoryBtn.onclick = function () {
+            const chatHistory = JSON.parse(localStorage.getItem('chat_history') || '[]');
+            const data = JSON.stringify(chatHistory, null, 2);
+            const blob = new Blob([data], { type: 'text/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'chat_history.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('Chat history exported!');
+        }
     </script>
 </body>
+</html>
+
 
 </html>

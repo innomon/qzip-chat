@@ -1,10 +1,10 @@
 {
-  "name": "qZip Chat",
-  "short_name": "Chat",
+  "name": "qZip AI Chat",
+  "short_name": "qZipAI",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fff",
-  "description": "AI driven LLM fitment evaluator",
+  "description": "AI driven chat application for qZip",
   "icons": [{
     "src": "icons/icon-192.png",
     "sizes": "192x192",
